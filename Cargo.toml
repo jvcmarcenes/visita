@@ -15,3 +15,5 @@ license = "MIT"
 
 [dependencies]
 visita_macros = { path = "visita_macros", version = "*" }
+
+[workspace]
