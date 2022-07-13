@@ -1,6 +1,6 @@
 [package]
 name = "visita"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 
 authors = ["João Vitor Costa Marcenes Vieira"]
@@ -14,4 +14,4 @@ readme = "README.md"
 license = "MIT"
 
 [dependencies]
-visita_macros = { path = "visita_macros", version = "0.1.0" }
+visita_macros = { path = "visita_macros", version = "0.1.1" }
