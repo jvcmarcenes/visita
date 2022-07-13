@@ -6,6 +6,12 @@ edition = "2021"
 authors = ["João Vitor Costa Marcenes Vieira"]
 description = "Macros for the visita crate"
 
+keywords = ["visitor", "pattern", "design_pattern", "visitor_pattern", "macros"]
+categories = ["rust-patterns"]
+
+repository = "https://github.com/jvcmarcenes/visita/visita_macros"
+license = "MIT"
+
 [lib]
 proc-macro = true
 
