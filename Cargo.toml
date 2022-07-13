@@ -1,0 +1,18 @@
+[package]
+name = "visita"
+version = "0.1.0"
+edition = "2021"
+
+authors = ["João Vitor Costa Marcenes Vieira"]
+description = "Elegant implementation of the Visitor Pattern"
+
+keywords = ["visitor", "pattern", "design_pattern", "visitor_pattern"]
+category = ["rust-patterns"]
+
+repository = "https://github.com/jvcmarcenes/visita"
+readme = "README.md"
+license-file = "LICENSE"
+license = "MIT"
+
+[dependencies]
+visita_macros = { path = "visita_macros" }
