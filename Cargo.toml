@@ -17,3 +17,4 @@ license = "MIT"
 visita_macros = { path = "visita_macros", version = "*" }
 
 [workspace]
+members = ["visita_macros"]
