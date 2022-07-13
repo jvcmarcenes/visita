@@ -96,7 +96,7 @@ pub(crate) fn node_group(attr: TokenStream, item: TokenStream) -> TokenStream {
 				type Data = #data;
 				fn accept(&self, v: &mut V) -> <V as visita::VisitorGroup<Self>>::Output {
 					match self.node.as_ref() {
-						#(ExprNode::#variant_idents(node) => node.accept(v, &self.data),)*
+						#(ExprNode::#variant_idents(node) => visita::Node::<V>::accept(node, v, &self.data),)*
 					}
 				}
 			}

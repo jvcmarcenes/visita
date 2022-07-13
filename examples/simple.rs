@@ -1,5 +1,5 @@
 
-use visita::*;
+use visita::{node_group, visitor, Visitor, Data, NodeGroup};
 
 #[derive(Debug, Clone)]
 enum BinOp { Add, Sub }
