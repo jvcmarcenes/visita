@@ -1,30 +1,31 @@
 
 pub use visita_macros::{node_group, visitor};
 
-pub trait NodeGroup<V> : Sized where V : VisitorGroup<Self> {
+// responsible for routing the visit methods to the different nodes
+pub trait NodeFamily<V> : Sized where V : Visitor<Self> {
 	type Data;
 
 	fn accept(&self, v: &mut V) -> V::Output;
 }
 
-pub trait Node<V> : Sized where V : VisitorGroup<Self::Group> + Visitor<Self> {
-	type Group : NodeGroup<V>;
+// responsible for associating a node to a collection of nodes
+pub trait Node<V> : Sized where V : Visitor<Self::Family> + Visit<Self> {
+	type Family : NodeFamily<V>;
 
-	fn accept(&self, v: &mut V, data: &Data<V, Self>) -> <V as VisitorGroup<Self::Group>>::Output {
+	fn accept(&self, v: &mut V, data: &Data<V, Self>) -> V::Output {
 		v.visit(self, data)
 	}
 }
 
-pub trait VisitorGroup<G> : Sized where G : NodeGroup<Self> {
+// responsible for dictating the output of traversing a group of nodes
+pub trait Visitor<F> : Sized where F : NodeFamily<Self> {
 	type Output;
-
-	fn visit_group(&mut self, g: &G) -> Self::Output {
-		g.accept(self)
-	}
 }
 
-pub trait Visitor<N> : VisitorGroup<N::Group> where N : Node<Self> {
+// responsible for the actual visiting logic
+pub trait Visit<N> : Visitor<N::Family> where N : Node<Self> {
 	fn visit(&mut self, node: &N, data: &Data<Self, N>) -> Self::Output;
 }
 
-pub type Data<V, N> = <<N as Node<V>>::Group as NodeGroup<V>>::Data;
+// shorthand for getting the data from a node, as it can get quite verbose
+pub type Data<V, N> = <<N as Node<V>>::Family as NodeFamily<V>>::Data;

@@ -26,7 +26,7 @@ pub(crate) fn node_group(attr: TokenStream, item: TokenStream) -> TokenStream {
 	let variant_idents = variants.iter().map(|v| v.ident.clone()).collect::<Vec<_>>();
 
 	let visitor_bounds = quote! {
-		visita::VisitorGroup<#ident> + #(visita::Visitor<#variant_idents>)+*
+		visita::Visitor<#ident> + #(visita::Visit<#variant_idents>)+*
 	};
 
 	let base_vis = match vis.clone() {
@@ -45,7 +45,7 @@ pub(crate) fn node_group(attr: TokenStream, item: TokenStream) -> TokenStream {
 				pub_token: <Token![pub]>::default(),
 				paren_token: Paren::default(),
 				in_token: Some(<Token![in]>::default()),
-				path
+				path,
 			})
 		},
 	};
@@ -59,7 +59,7 @@ pub(crate) fn node_group(attr: TokenStream, item: TokenStream) -> TokenStream {
 			#(#attrs)*
 			#base_vis struct #var_ident #fields #semi
 			impl<V> visita::Node<V> for #var_ident where V : #visitor_bounds {
-				type Group = #ident;
+				type Family = #ident;
 			}
 			impl #var_ident {
 				pub fn to_node(self, data: #data) -> #ident {
@@ -92,11 +92,11 @@ pub(crate) fn node_group(attr: TokenStream, item: TokenStream) -> TokenStream {
 				data: #data,
 			}
 
-			impl<V> visita::NodeGroup<V> for #ident where V : #visitor_bounds {
+			impl<V> visita::NodeFamily<V> for #ident where V : #visitor_bounds {
 				type Data = #data;
-				fn accept(&self, v: &mut V) -> <V as visita::VisitorGroup<Self>>::Output {
+				fn accept(&self, v: &mut V) -> <V as visita::Visitor<Self>>::Output {
 					match self.node.as_ref() {
-						#(#node_ident::#variant_idents(node) => visita::Node::<V>::accept(node, v, &self.data),)*
+						#(#node_ident::#variant_idents(node) => visita::Visit::<#variant_idents>::visit(v, node, &self.data),)*
 					}
 				}
 			}

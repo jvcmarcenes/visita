@@ -1,5 +1,5 @@
 
-use visita::{node_group, visitor, Visitor, Data, NodeGroup};
+use visita::{node_group, visitor, Visit, Data, NodeFamily};
 
 #[derive(Debug, Clone)]
 enum BinOp { Add, Sub }
@@ -23,13 +23,13 @@ enum Expr {
 #[visitor(Expr, output = f32)]
 struct Interpreter;
 
-impl Visitor<NumLit> for Interpreter {
+impl Visit<NumLit> for Interpreter {
 	fn visit(&mut self, node: &NumLit, _data: &Data<Self, NumLit>) -> Self::Output {
 		node.0
 	}
 }
 
-impl Visitor<Bin> for Interpreter {
+impl Visit<Bin> for Interpreter {
 	fn visit(&mut self, node: &Bin, _data: &Data<Self, Bin>) -> Self::Output {
 		match node.op {
 			BinOp::Add => node.lhs.accept(self) + node.rhs.accept(self),
@@ -41,13 +41,13 @@ impl Visitor<Bin> for Interpreter {
 #[visitor(Expr, output = String)]
 struct Printer;
 
-impl Visitor<NumLit> for Printer {
+impl Visit<NumLit> for Printer {
 	fn visit(&mut self, node: &NumLit, _data: &Data<Self, Bin>) -> Self::Output {
 		format!("{}", node.0)
 	}
 }
 
-impl Visitor<Bin> for Printer {
+impl Visit<Bin> for Printer {
 	fn visit(&mut self, node: &Bin, _data: &Data<Self, Bin>) -> Self::Output {
 		format!("({} {} {})",
 			node.lhs.accept(self),

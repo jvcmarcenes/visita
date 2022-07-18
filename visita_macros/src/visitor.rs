@@ -25,7 +25,7 @@ pub(crate) fn visitor(attr: TokenStream, item: TokenStream) -> TokenStream {
 	quote! {
 		#item
 		
-		impl #generics visita::VisitorGroup<#node> for #ident #generics {
+		impl #generics visita::Visitor<#node> for #ident #generics {
 			type Output = #output;
 		}
 	}.into()
