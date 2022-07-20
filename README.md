@@ -16,7 +16,7 @@ pub enum Operation { Add, Sub, Mul, Div }
 
 // Use the `node_group` macro to annotate your group of nodes
 // the `data` field allows you to attach additional data to your nodes
-[node_group(data = ())]
+#[node_group(data = ())]
 pub enum Expr {
 
   NumLit(f64),
