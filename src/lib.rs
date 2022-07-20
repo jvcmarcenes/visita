@@ -22,10 +22,10 @@ pub trait Visitor<F> : Sized where F : NodeFamily<Self> {
 	type Output;
 }
 
-// responsible for the actual visiting logic
+/// Implements the visiting logic for a node
 pub trait Visit<N> : Visitor<N::Family> where N : Node<Self> {
 	fn visit(&mut self, node: &N, data: &Data<Self, N>) -> Self::Output;
 }
 
-// shorthand for getting the data from a node, as it can get quite verbose
+/// Shorthand for getting the data type from a node, as it can get quite verbose
 pub type Data<V, N> = <<N as Node<V>>::Family as NodeFamily<V>>::Data;
