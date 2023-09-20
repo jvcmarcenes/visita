@@ -7,6 +7,24 @@ Elegant implementation of the [**Visitor Pattern**](https://en.wikipedia.org/wik
 
 ---
 
+## Benefits
+
+This crate aims to simplify the process of implementing the visitor pattern by removing the need to write the "routing" logic for the visitor, the `node_group` macro expands to the necessary boilerplate.
+
+The visiting logic is also represented by a trait, meaning you are free to split this logic in whichever way is best for your project.
+
+The macros will also generate a trait bound that will enforce visitors implement the necessary visiting logic for all possible variants.
+
+## High-level
+
+A *NodeFamily* is a type that represents the possible values to be visited, this is most usually an `enum`. the `NodeFamily` trait exposes two members: the `Data` associated type is whatever additional data we want to tag with our possible variants, such as source information; and the `accept` function is for visiting the node with the given *Visitor*.
+
+The *Node* trait should be implemented for all possible variants of our NodeFamily type. it has a `Family` associated type, which should be the NodeFamily type this node belongs to; and an `accept` method which is mostly there for some convenience. Sadly, enum variants in Rust aren't treated as types, so each enum variant must be a 1-tuple containing the type implementing `Node`.
+
+The `Visit` trait represents the process of a *Visitor* (`Self`) visiting some `Node`, it has a single method `visit` which performs this operation, with the output type being defined in its supertrait `Visitor`
+
+A *Visitor* is a type that's capable of visiting all variants of a NodeFamily. it should implement the `Visitor<N>` trait, where N is the node family this visitor visits. this crate also provides a convenience macro `visitor`, that will expand to an implementation of the trait.
+
 ## Usage:
 
 ```rust
